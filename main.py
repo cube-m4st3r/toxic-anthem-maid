@@ -10,7 +10,7 @@ from colorama import Back, Fore, Style
 
 load_dotenv("settings.env")
 
-my_guild = discord.Object(id=os.getenv("TESTING-GUILD-ID"))
+my_guild = discord.Object(id=os.getenv("GUILD-ID"))
 
 
 @tasks.loop(minutes=5.0)
