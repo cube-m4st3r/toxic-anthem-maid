@@ -15,7 +15,7 @@ my_guild = discord.Object(id=os.getenv("GUILD-ID"))
 
 @tasks.loop(minutes=5.0)
 async def update_presence(self):
-    presence_game_list = ['monopoly with Estinien', 'with Chocbos', 'triple triad..']
+    presence_game_list = ['monopoly with Estinien', 'with Chocobos', 'triple triad..']
 
     random_presence = random.choice(presence_game_list)
     await self.change_presence(status=discord.Status.dnd, activity=discord.Game(name=random_presence))
