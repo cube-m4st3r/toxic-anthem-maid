@@ -10,7 +10,7 @@ from colorama import Back, Fore, Style
 
 load_dotenv("settings.env")
 
-my_guild = discord.Object(id=os.getenv("GUILD-ID"))
+my_guild = discord.Object(id=os.getenv("TESTING-GUILD-ID"))
 
 
 @tasks.loop(minutes=5.0)
@@ -24,6 +24,13 @@ async def update_presence(self):
 class Client(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix=commands.when_mentioned_or('.'), intents=discord.Intents().all())
+
+    async def setup_hook(self):
+        for fileName in os.listdir('./cogs/join_event'):
+            if fileName.endswith('.py'):
+                await self.load_extension(f'cogs.join_event.{fileName[:-3]}')
+
+        await self.tree.sync(guild=my_guild)
 
     async def on_ready(self):
         prfx = (Back.BLACK + Fore.GREEN + time.strftime("%H:%M:%S UTC",
@@ -40,6 +47,7 @@ class Client(commands.Bot):
 
 
 client = Client()
+
 
 @client.event
 async def on_member_join(member):
