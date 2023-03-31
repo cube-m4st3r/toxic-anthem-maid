@@ -6,13 +6,13 @@ from discord.ext import commands
 from PIL import Image
 from io import BytesIO
 
+
 class wanted(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
     @app_commands.command(name="wanted", description="Wanted image with user")
-    async def wanted_image(self, interaction: discord.Interaction, member: discord.Member=None):
-
+    async def wanted_image(self, interaction: discord.Interaction, member: discord.Member = None):
         if member == None:
             member = interaction.user
 
@@ -23,7 +23,7 @@ class wanted(commands.Cog):
 
         pfp = pfp.resize((900, 900))
 
-        wanted.paste(pfp, (550, 878)) #no float
+        wanted.paste(pfp, (550, 878))  # no float
 
         wanted.save("cogs/join_event/profile.jpg")
 
@@ -31,5 +31,6 @@ class wanted(commands.Cog):
 
         os.remove("cogs/join_event/profile.jpg")
 
-async def setup(bot:commands.Bot) -> None:
-    await bot.add_cog(wanted(bot), guild=discord.Object(id=os.getenv("TESTING-GUILD-ID")))
+
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(wanted(bot), guild=discord.Object(id=os.getenv("GUILD-ID")))
