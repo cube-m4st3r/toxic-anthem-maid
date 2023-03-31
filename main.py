@@ -8,6 +8,8 @@ import os
 from dotenv import load_dotenv
 from colorama import Back, Fore, Style
 
+from database import database
+
 load_dotenv("settings.env")
 
 my_guild = discord.Object(id=os.getenv("GUILD-ID"))
@@ -40,9 +42,10 @@ class Client(commands.Bot):
         print(f"{prfx} Discord Version: {Fore.YELLOW + discord.__version__}")
         print(f"{prfx} Python Version: {Fore.YELLOW + str(platform.python_version())}")
         self.tree.copy_global_to(guild=discord.Object(id=1076193627778326671))
-        print(
-            f"{prfx} Slash CMDs Synced: {Fore.YELLOW + str(len(await self.tree.fetch_commands(guild=my_guild)))} Commands")
+        print(f"{prfx} Slash CMDs Synced: {Fore.YELLOW + str(len(await self.tree.fetch_commands(guild=my_guild)))} Commands")
         print(f"{prfx} Connected to: {Fore.YELLOW + str(len(self.guilds))} Guilds")
+        if await database.init_database():
+            print(f"{prfx} Database Connection:{Fore.YELLOW} successful.")
         await update_presence.start(self)
 
 
