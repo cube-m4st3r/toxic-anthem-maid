@@ -32,6 +32,10 @@ class Client(commands.Bot):
             if fileName.endswith('.py'):
                 await self.load_extension(f'cogs.join_event.{fileName[:-3]}')
 
+        for fileName in os.listdir('./cogs/select_roles'):
+            if fileName.endswith('.py'):
+                await self.load_extension(f'cogs.select_roles.{fileName[:-3]}')
+
         await self.tree.sync(guild=my_guild)
 
     async def on_ready(self):
