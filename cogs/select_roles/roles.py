@@ -4,6 +4,11 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
+class RoleMenuButton(discord.ui.Button):
+    def __init__(self, text, buttonStyle, mode):
+        super().__init__(label=text, style=buttonStyle)
+        self.mode = mode
+
 class roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
