@@ -9,6 +9,11 @@ class RoleMenuButton(discord.ui.Button):
         super().__init__(label=text, style=buttonStyle)
         self.mode = mode
 
+class RoleMenuView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(RoleMenuButton("Role1", discord.ButtonStyle.primary, 0))
+        
 class roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
