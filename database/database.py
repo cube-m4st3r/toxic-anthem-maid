@@ -12,7 +12,8 @@ async def init_database():
         host=os.getenv("DB.HOST"),
         user=os.getenv("DB.USER"),
         password=os.getenv("DB.PW"),
-        port=os.getenv("DB.PORT")
+        port=os.getenv("DB.PORT"),
+        database=os.getenv("DB")
     )
 
     global cursor
