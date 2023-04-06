@@ -1,4 +1,5 @@
 import os
+import time
 
 import discord
 from discord import app_commands
@@ -29,15 +30,23 @@ class RoleMenuView(discord.ui.View):
 
 
 class RoleMenuSelect(discord.ui.RoleSelect):
-    def __init__(self):
+    def __init__(self, bot = discord.Client):
         super().__init__(placeholder="Wähle deine gewünschte(n) Rolle(n) aus", min_values=1, max_values=10)
-
+        self.bot = bot
     async def callback(self, interaction: discord.Interaction):
         roles = list()
         for res in self.values:
             roles.append(res.mention)
 
-        await interaction.response.send_message(' '.join(roles))
+        message = await interaction.message.edit(content=' '.join(sorted(roles)), view=None)
+        messageid = message.id
+
+        guild = interaction.guild
+        channel = guild.get_channel(interaction.channel_id)
+        msg = await channel.fetch_message(messageid)
+        time.sleep(5)
+        await msg.edit(content="test")
+
 
 
 class SelectRoleMenuView(discord.ui.View):
