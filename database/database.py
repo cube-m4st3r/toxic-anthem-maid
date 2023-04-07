@@ -11,7 +11,9 @@ async def init_database():
     mydb = mysql.connector.connect(
         host=os.getenv("DB.HOST"),
         user=os.getenv("DB.USER"),
-        password=os.getenv("DB.PW")
+        password=os.getenv("DB.PW"),
+        port=os.getenv("DB.PORT"),
+        database=os.getenv("DB")
     )
 
     global cursor
