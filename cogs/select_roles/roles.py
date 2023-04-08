@@ -4,6 +4,32 @@ import time
 import discord
 from discord import app_commands
 from discord.ext import commands
+from classes.roles import Roles
+
+
+class RoleMenuSelect(discord.ui.RoleSelect):
+    def __init__(self, bot=discord.Client):
+        super().__init__(placeholder="Select the roles", min_values=1, max_values=10)
+        self.bot = bot
+
+    async def callback(self, interaction: discord.Interaction):
+
+        roles = Roles()
+        for role in self.values:
+            roles.set_role_id(role.id)
+            roles.set_role_name(role.name)
+            roles.set_role_color_code(role.color)
+
+        role = roles("1090989465922703370")
+        print(role.get_role_name)
+
+        #message = await interaction.message.edit(view=RoleMenuView(roles))
+
+
+class SelectRoleMenuView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(RoleMenuSelect())
 
 
 class RoleMenuButton(discord.ui.Button):
@@ -17,42 +43,17 @@ class RoleMenuButton(discord.ui.Button):
             await interaction.response.send_message("Role1")
         elif self.mode == 1:
             await interaction.response.send_message("Role2")
-        elif self.moode == "cancel":
+        elif self.mode == "cancel":
             await interaction.response.send_message("Cancel")
 
 
 class RoleMenuView(discord.ui.View):
-    def __init__(self):
+    def __init__(self, roles):
         super().__init__(timeout=None)
+        self.roles = roles
         self.add_item(RoleMenuButton("Role1", discord.ButtonStyle.primary, 0))
         self.add_item(RoleMenuButton("Role2", discord.ButtonStyle.primary, 1))
         self.add_item(RoleMenuButton("cancel", discord.ButtonStyle.primary, "cancel"))
-
-
-class RoleMenuSelect(discord.ui.RoleSelect):
-    def __init__(self, bot = discord.Client):
-        super().__init__(placeholder="Wähle deine gewünschte(n) Rolle(n) aus", min_values=1, max_values=10)
-        self.bot = bot
-    async def callback(self, interaction: discord.Interaction):
-        roles = list()
-        for res in self.values:
-            roles.append(res.mention)
-
-        message = await interaction.message.edit(content=' '.join(sorted(roles)), view=None)
-        messageid = message.id
-
-        guild = interaction.guild
-        channel = guild.get_channel(interaction.channel_id)
-        msg = await channel.fetch_message(messageid)
-        time.sleep(5)
-        await msg.edit(content="test")
-
-
-
-class SelectRoleMenuView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-        self.add_item(RoleMenuSelect())
 
 
 class roles(commands.Cog):
