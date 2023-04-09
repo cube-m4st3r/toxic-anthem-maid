@@ -1,7 +1,11 @@
 class Roles:
-    def __init__(self, role_id=None):
-        if not role_id:
+    def __init__(self, role_id=None, role_name=None, role_color_code=None):
+        if role_id is not None:
             self.role_id = role_id
+            self.role_name = role_name
+            self.role_color_code = role_color_code
+        else:
+            pass
 
     def get_role_id(self):
         return self.role_id
