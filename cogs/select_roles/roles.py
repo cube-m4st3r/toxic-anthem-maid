@@ -14,16 +14,19 @@ class RoleMenuSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
 
+        output = discord.Embed(title="Select your Role")
+
         roles = Roles()
         for role in self.values:
             roles.set_role_id(role.id)
             roles.set_role_name(role.name)
             roles.set_role_color_code(role.color)
+            output.add_field(name=role.mention, value="Role")
 
-        role = roles("1090989465922703370")
-        print(role.get_role_name)
+        test = Roles("1090989465922703370")
+        print(test.get_role_name())
 
-        #message = await interaction.message.edit(view=RoleMenuView(roles))
+        message = await interaction.message.edit(embed=output, view=None)
 
 
 class SelectRoleMenuView(discord.ui.View):
