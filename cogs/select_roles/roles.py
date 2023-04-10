@@ -68,6 +68,12 @@ class roles(commands.Cog):
     async def create_role(self, interaction: discord.Interaction, role_name: str):
         await interaction.response.send_message("Create a role with this command!")
 
+    @app_commands.command(name="delete_role", description="Delete a Role")
+    @app_commands.checks.has_role("Discord Manager")
+    @app_commands.checks.has_role("Master")
+    async def delete_role(self, interaction: discord.Interaction, role_name: str):
+        await interaction.respone.send_message("Delete a role with this command!")
+
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
     @app_commands.checks.has_role("Discord Manager" or "Master")
     async def new_role_menu(self, interaction: discord.Interaction):
