@@ -23,10 +23,7 @@ class RoleMenuSelect(discord.ui.RoleSelect):
             roles.set_role_color_code(role.color)
             output.add_field(name=role.mention, value="Role")
 
-        test = Roles("1090989465922703370")
-        print(test.get_role_name())
-
-        message = await interaction.message.edit(embed=output, view=None)
+        await interaction.message.edit(embed=output, view=None)
 
 
 class SelectRoleMenuView(discord.ui.View):
@@ -73,6 +70,16 @@ class roles(commands.Cog):
     @app_commands.checks.has_role("Master")
     async def delete_role(self, interaction: discord.Interaction, role_name: str):
         await interaction.respone.send_message("Delete a role with this command!")
+
+    @app_commands.command(name="change_role", description="Change a Role")
+    @app_commands.checks.has_role("Discord Manager" or "Master")
+    @app_commands.choices(choices=[
+        app_commands.Choice(name="Name", value="role_name"),
+        app_commands.Choice(name="Color", value="role_color")
+    ])
+    async def change_role(self, interaction: discord.Interaction, choices: app_commands.Choice[str]):
+        await interaction.response.send_message(view=SelectRoleMenuView())
+
 
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
     @app_commands.checks.has_role("Discord Manager" or "Master")
