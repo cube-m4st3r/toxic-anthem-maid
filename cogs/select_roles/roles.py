@@ -26,10 +26,9 @@ class RoleMenuSelect(discord.ui.RoleSelect):
         await interaction.message.edit(embed=output, view=None)
 
 
-class SelectRoleMenuView(discord.ui.View):
+class RoleChangeSelect(discord.ui.RoleSelect):
     def __init__(self):
-        super().__init__(timeout=None)
-        self.add_item(RoleMenuSelect())
+        super().__init__(placeholder="Select the role", min_values=1,max_values=1)
 
 
 class RoleMenuButton(discord.ui.Button):
@@ -47,13 +46,16 @@ class RoleMenuButton(discord.ui.Button):
             await interaction.response.send_message("Cancel")
 
 
-class RoleMenuView(discord.ui.View):
-    def __init__(self, roles):
+class SelectRoleChangeView(discord.ui.View):
+    def __init__(self):
         super().__init__(timeout=None)
-        self.roles = roles
-        self.add_item(RoleMenuButton("Role1", discord.ButtonStyle.primary, 0))
-        self.add_item(RoleMenuButton("Role2", discord.ButtonStyle.primary, 1))
-        self.add_item(RoleMenuButton("cancel", discord.ButtonStyle.primary, "cancel"))
+        self.add_item(RoleChangeSelect())
+
+
+class SelectRoleMenuView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(RoleMenuSelect())
 
 
 class roles(commands.Cog):
@@ -78,7 +80,7 @@ class roles(commands.Cog):
         app_commands.Choice(name="Color", value="role_color")
     ])
     async def change_role(self, interaction: discord.Interaction, choices: app_commands.Choice[str]):
-        await interaction.response.send_message(view=SelectRoleMenuView())
+        await interaction.response.send_message(view=SelectRoleChangeView())
 
 
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
