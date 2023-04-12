@@ -30,6 +30,12 @@ class RoleChangeSelect(discord.ui.RoleSelect):
     def __init__(self):
         super().__init__(placeholder="Select the role", min_values=1,max_values=1)
 
+    async def callback(self, interaction: discord.Interaction):
+
+        role = self.values[0]
+
+        await interaction.response.edit(content=f"Please enter the new name for: {role.mention}", view=None)
+
 
 class RoleMenuButton(discord.ui.Button):
     def __init__(self, text, buttonStyle, mode):
@@ -46,16 +52,16 @@ class RoleMenuButton(discord.ui.Button):
             await interaction.response.send_message("Cancel")
 
 
-class SelectRoleChangeView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-        self.add_item(RoleChangeSelect())
-
-
 class SelectRoleMenuView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         self.add_item(RoleMenuSelect())
+
+
+class SelectRoleChangeView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(RoleChangeSelect())
 
 
 class roles(commands.Cog):
