@@ -37,6 +37,14 @@ class RoleChangeSelect(discord.ui.RoleSelect):
         await interaction.response.edit(content=f"Please enter the new name for: {role.mention}", view=None)
 
 
+class RoleChangeNameModal(discord.ui.View):
+    def __init__(self, role: discord.Role):
+        super().__init__(title=f"Change name of {role.name}")
+        self.role = role
+
+    role_name = discord.ui.TextInput(label="Name", style=discord.TextStyle.short, placeholder="Please enter a valid name", required=True)
+
+
 class RoleMenuButton(discord.ui.Button):
     def __init__(self, text, buttonStyle, mode):
         super().__init__(label=text, style=buttonStyle)
