@@ -6,6 +6,7 @@ from discord import app_commands
 from discord.ext import commands
 from classes.roles import Roles
 
+roles = None
 
 class RoleMenuSelect(discord.ui.RoleSelect):
     def __init__(self, bot=discord.Client):
@@ -15,13 +16,12 @@ class RoleMenuSelect(discord.ui.RoleSelect):
     async def callback(self, interaction: discord.Interaction):
 
         output = discord.Embed(title="Select your Role")
+        output.set_footer(text=(f"ID: 012345"))
 
-        roles = Roles()
+        global roles
         for role in self.values:
-            roles.set_role_id(role.id)
-            roles.set_role_name(role.name)
-            roles.set_role_color_code(role.color)
-            output.add_field(name=role.mention, value="Role")
+            roles = Roles(role.id, role.name)
+            output.add_field(name=roles.get_role_name(), value="Role", inline=False)
 
         await interaction.message.edit(embed=output, view=None)
 
@@ -117,7 +117,7 @@ class roles(commands.Cog):
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
     @app_commands.checks.has_role("Discord Manager" or "Master")
     async def new_role_menu(self, interaction: discord.Interaction):
-        await interaction.response.send_message(content="role_menu", view=SelectRoleMenuView())
+        await interaction.response.send_message(view=SelectRoleMenuView())
 
 
 async def setup(bot: commands.Bot) -> None:

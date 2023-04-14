@@ -6,6 +6,7 @@ import os
 cursor: MySQLCursor | CMySQLCursor = NotImplemented
 mydb = None
 
+
 async def init_database():
     global mydb
     mydb = mysql.connector.connect(
@@ -23,3 +24,9 @@ async def init_database():
         return True
     else:
         return False
+
+
+def insert_role(role_id, role_name):
+    sql = "INSERT INTO role VALUES(%s, %s)"
+    val = role_id, role_name
+    cursor.execute(sql, val)
