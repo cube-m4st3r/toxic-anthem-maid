@@ -26,6 +26,18 @@ class RoleMenuSelect(discord.ui.RoleSelect):
         await interaction.message.edit(embed=output, view=None)
 
 
+class RoleDeleteSelect(discord.ui.RoleSelect):
+    def __init__(self):
+        super().__init__(placeholder="Select the role", min_values=1, max_values=1)
+
+    async def callback(self, interaction: discord.Interaction):
+
+        role = self.values[0]
+
+        await interaction.response.send_message(f"{role}")
+        await role.delete()
+
+
 class RoleChangeSelect(discord.ui.RoleSelect):
     def __init__(self):
         super().__init__(placeholder="Select the role", min_values=1,max_values=1)
@@ -66,6 +78,12 @@ class SelectRoleMenuView(discord.ui.View):
         self.add_item(RoleMenuSelect())
 
 
+class RoleDeleteView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+        self.add_item(RoleDeleteSelect())
+
+
 class SelectRoleChangeView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
@@ -83,9 +101,8 @@ class roles(commands.Cog):
 
     @app_commands.command(name="delete_role", description="Delete a Role")
     @app_commands.checks.has_role("Discord Manager")
-    @app_commands.checks.has_role("Master")
-    async def delete_role(self, interaction: discord.Interaction, role_name: str):
-        await interaction.respone.send_message("Delete a role with this command!")
+    async def delete_role(self, interaction: discord.Interaction):
+        await interaction.response.send_message(view=RoleDeleteView())
 
     @app_commands.command(name="change_role", description="Change a Role")
     @app_commands.checks.has_role("Discord Manager" or "Master")
