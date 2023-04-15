@@ -5,6 +5,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from classes.roles import Roles
+from random import randrange
 
 from database import database as db
 
@@ -18,20 +19,31 @@ class RoleMenuSelect(discord.ui.RoleSelect):
     async def callback(self, interaction: discord.Interaction):
 
         output = discord.Embed(title="Select your Role")
-        output.set_footer(text=(f"ID: 012345"))
+
+        while True:
+            id = randrange(100)
+
+            if db.check_role_menu_embed(str(id)):
+                return
+            else:
+                output.set_footer(text=(f"ID: {str(id)}"))
+                break
+
 
         global tRoles
         tRoles = list()
 
+        buttons = []
+
+        rolemenubutton = RoleMenuButtonView()
         for role in self.values:
             roles = Roles(role.id, role.name)
-            if db.select_role(roles.get_role_id()) is False:
-                print("test")
+            if db.check_role(roles.get_role_id()) is False:
                 db.insert_role(roles.get_role_id(), roles.get_role_name())
             output.add_field(name=roles.get_role_name(), value="Role", inline=False)
             tRoles.append(roles)
-
-        await interaction.message.edit(embed=output, view=None)
+            rolemenubutton.add_item(RoleMenuButton(roles.get_role_name(), discord.ButtonStyle.primary, roles.get_role_name()))
+        await interaction.response.send_message(embed=output, view=rolemenubutton)
 
 
 class RoleDeleteSelect(discord.ui.RoleSelect):
@@ -84,6 +96,11 @@ class RoleMenuView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         self.add_item(RoleMenuSelect())
+
+
+class RoleMenuButtonView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
 
 
 class RoleDeleteView(discord.ui.View):

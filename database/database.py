@@ -33,9 +33,20 @@ def insert_role(role_id, role_name):
     mydb.commit()
 
 
-def select_role(role_id):
+def check_role(role_id):
     sql = "SELECT role_id FROM role WHERE role_id = %s"
     val = str(role_id)
+    cursor.execute(sql, (val,))
+    cursor.fetchall()
+    if cursor.rowcount == 0:
+        return False
+    else:
+        return True
+
+
+def check_role_menu_embed(menu_embed_id):
+    sql = "SELECT menu_embed_id FROM embed WHERE menu_embed_id = %s"
+    val = str(menu_embed_id)
     cursor.execute(sql, (val,))
     cursor.fetchall()
     if cursor.rowcount == 0:
