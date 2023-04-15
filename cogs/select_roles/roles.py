@@ -6,7 +6,9 @@ from discord import app_commands
 from discord.ext import commands
 from classes.roles import Roles
 
-roles = None
+from database import database as db
+
+tRoles = None
 
 class RoleMenuSelect(discord.ui.RoleSelect):
     def __init__(self, bot=discord.Client):
@@ -18,10 +20,16 @@ class RoleMenuSelect(discord.ui.RoleSelect):
         output = discord.Embed(title="Select your Role")
         output.set_footer(text=(f"ID: 012345"))
 
-        global roles
+        global tRoles
+        tRoles = list()
+
         for role in self.values:
             roles = Roles(role.id, role.name)
+            if db.select_role(roles.get_role_id()) is False:
+                print("test")
+                db.insert_role(roles.get_role_id(), roles.get_role_name())
             output.add_field(name=roles.get_role_name(), value="Role", inline=False)
+            tRoles.append(roles)
 
         await interaction.message.edit(embed=output, view=None)
 
@@ -72,7 +80,7 @@ class RoleMenuButton(discord.ui.Button):
             await interaction.response.send_message("Cancel")
 
 
-class SelectRoleMenuView(discord.ui.View):
+class RoleMenuView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
         self.add_item(RoleMenuSelect())
@@ -94,15 +102,18 @@ class roles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
     @app_commands.command(name="create_role", description="Create a Role")
     @app_commands.checks.has_role("Discord Manager" or "Master")
     async def create_role(self, interaction: discord.Interaction, role_name: str):
         await interaction.response.send_message("Create a role with this command!")
 
+
     @app_commands.command(name="delete_role", description="Delete a Role")
     @app_commands.checks.has_role("Discord Manager")
     async def delete_role(self, interaction: discord.Interaction):
         await interaction.response.send_message(view=RoleDeleteView())
+
 
     @app_commands.command(name="change_role", description="Change a Role")
     @app_commands.checks.has_role("Discord Manager" or "Master")
@@ -117,7 +128,7 @@ class roles(commands.Cog):
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
     @app_commands.checks.has_role("Discord Manager" or "Master")
     async def new_role_menu(self, interaction: discord.Interaction):
-        await interaction.response.send_message(view=SelectRoleMenuView())
+        await interaction.response.send_message(view=RoleMenuView())
 
 
 async def setup(bot: commands.Bot) -> None:

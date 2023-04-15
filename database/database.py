@@ -28,5 +28,17 @@ async def init_database():
 
 def insert_role(role_id, role_name):
     sql = "INSERT INTO role VALUES(%s, %s)"
-    val = role_id, role_name
+    val = str(role_id), role_name
     cursor.execute(sql, val)
+    mydb.commit()
+
+
+def select_role(role_id):
+    sql = "SELECT role_id FROM role WHERE role_id = %s"
+    val = str(role_id)
+    cursor.execute(sql, (val,))
+    cursor.fetchall()
+    if cursor.rowcount == 0:
+        return False
+    else:
+        return True
