@@ -3,6 +3,8 @@ from mysql.connector.cursor import MySQLCursor
 from mysql.connector.cursor_cext import CMySQLCursor
 import os
 
+from classes.roles import Roles
+
 cursor: MySQLCursor | CMySQLCursor = NotImplemented
 mydb = None
 
@@ -67,3 +69,26 @@ def check_role_menu_embed(menu_embed_id):
         return False
     else:
         return True
+
+
+def load_embed_menu_roles(menu_embed_id):
+    sql = "SELECT role_role_id, role_name FROM role_menu_embed rme JOIN role r ON rme.role_role_id = r.role_id WHERE embed_menu_embed_id = %s"
+    val = menu_embed_id
+    cursor.execute(sql, val)
+    res = cursor.fetchall()
+
+    retval = list()
+
+    for ctx in res:
+        role = Roles()
+        if role.get_role_id(ctx[0]):
+            retval.append(role)
+        else:
+            role = Roles(ctx[0], ctx[1])
+            retval.append(role)
+
+    return retval
+
+
+#def load_embed_menus():
+#   sql = "SELECT * FROM "
