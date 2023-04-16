@@ -28,8 +28,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `TA_Maid`.`embed`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `TA_Maid`.`embed` (
-  `menu_embed_id` INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `TA_Maid`.`menu_embed` (
+  `menu_embed_id` VARCHAR(45) NOT NULL,
+  `message_id` VARCHAR(45) NOT NULL,
   `embed_title` VARCHAR(45) NULL,
   `embed_description` VARCHAR(45) NULL,
   PRIMARY KEY (`menu_embed_id`))
@@ -41,7 +42,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `TA_Maid`.`role_menu_embed` (
   `role_role_id` VARCHAR(45) NOT NULL,
-  `embed_menu_embed_id` INT NOT NULL,
+  `embed_menu_embed_id` VARCHAR(45) NOT NULL,
   `role_description` VARCHAR(45) NULL,
   PRIMARY KEY (`role_role_id`, `embed_menu_embed_id`),
   INDEX `fk_role_has_role_menu_embed_role_menu_embed1_idx` (`embed_menu_embed_id` ASC),
@@ -53,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `TA_Maid`.`role_menu_embed` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_role_has_role_menu_embed_role_menu_embed1`
     FOREIGN KEY (`embed_menu_embed_id`)
-    REFERENCES `TA_Maid`.`embed` (`menu_embed_id`)
+    REFERENCES `TA_Maid`.`menu_embed` (`menu_embed_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

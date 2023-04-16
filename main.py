@@ -52,7 +52,6 @@ class Client(commands.Bot):
             print(f"{prfx} Database Connection:{Fore.YELLOW} successful.")
         await update_presence.start(self)
 
-
 client = Client()
 
 

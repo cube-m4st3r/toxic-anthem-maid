@@ -1,3 +1,4 @@
+import enum
 import os
 import time
 
@@ -18,7 +19,7 @@ class RoleMenuSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
 
-        output = discord.Embed(title="Select your Role")
+        embed = discord.Embed(title="Select your Role")
 
         while True:
             id = randrange(100)
@@ -26,9 +27,8 @@ class RoleMenuSelect(discord.ui.RoleSelect):
             if db.check_role_menu_embed(str(id)):
                 return
             else:
-                output.set_footer(text=(f"ID: {str(id)}"))
+                embed.set_footer(text=(f"ID: {str(id)}"))
                 break
-
 
         global tRoles
         tRoles = list()
@@ -36,14 +36,16 @@ class RoleMenuSelect(discord.ui.RoleSelect):
         buttons = []
 
         rolemenubutton = RoleMenuButtonView()
+        db.insert_menu_embed(id, interaction.message.id, embed.title, embed.description)
         for role in self.values:
             roles = Roles(role.id, role.name)
             if db.check_role(roles.get_role_id()) is False:
                 db.insert_role(roles.get_role_id(), roles.get_role_name())
-            output.add_field(name=roles.get_role_name(), value="Role", inline=False)
+            embed.add_field(name=roles.get_role_name(), value="Role", inline=False)
+            db.insert_role_menu_embed(roles.get_role_id(), id, "description")
             tRoles.append(roles)
             rolemenubutton.add_item(RoleMenuButton(roles.get_role_name(), discord.ButtonStyle.primary, roles.get_role_name()))
-        await interaction.response.send_message(embed=output, view=rolemenubutton)
+        await interaction.response.send_message(embed=embed, view=rolemenubutton)
 
 
 class RoleDeleteSelect(discord.ui.RoleSelect):
@@ -63,9 +65,7 @@ class RoleChangeSelect(discord.ui.RoleSelect):
         super().__init__(placeholder="Select the role", min_values=1,max_values=1)
 
     async def callback(self, interaction: discord.Interaction):
-
         role = self.values[0]
-
         await interaction.response.edit(content=f"Please enter the new name for: {role.mention}", view=None)
 
 
@@ -144,7 +144,7 @@ class roles(commands.Cog):
 
     @app_commands.command(name="new_role_menu", description="Create a new Role Menu")
     @app_commands.checks.has_role("Discord Manager" or "Master")
-    async def new_role_menu(self, interaction: discord.Interaction):
+    async def new_role_menu(self, interaction: discord.Interaction, text_channel: discord.TextChannel):
         await interaction.response.send_message(view=RoleMenuView())
 
 

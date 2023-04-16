@@ -33,6 +33,20 @@ def insert_role(role_id, role_name):
     mydb.commit()
 
 
+def insert_menu_embed(menu_embed_id, message_id, embed_title: None, embed_description: None):
+    sql = "INSERT INTO menu_embed VALUES(%s, %s, %s, %s)"
+    val = menu_embed_id, message_id, embed_title, embed_description
+    cursor.execute(sql, val)
+    mydb.commit()
+
+
+def insert_role_menu_embed(role_id, menu_embed_id, role_description: None):
+    sql = "INSERT INTO role_menu_embed VALUES(%s, %s, %s)"
+    val = role_id, menu_embed_id, role_description
+    cursor.execute(sql, val)
+    mydb.commit()
+
+
 def check_role(role_id):
     sql = "SELECT role_id FROM role WHERE role_id = %s"
     val = str(role_id)
@@ -45,7 +59,7 @@ def check_role(role_id):
 
 
 def check_role_menu_embed(menu_embed_id):
-    sql = "SELECT menu_embed_id FROM embed WHERE menu_embed_id = %s"
+    sql = "SELECT menu_embed_id FROM menu_embed WHERE menu_embed_id = %s"
     val = str(menu_embed_id)
     cursor.execute(sql, (val,))
     cursor.fetchall()
