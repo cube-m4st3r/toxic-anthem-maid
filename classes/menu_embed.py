@@ -1,3 +1,5 @@
+from database import database as db
+
 class Menu_Embed:
     def __init__(self, menu_embed_id, message_id, embed_title=None, embed_description=None):
         self.id = menu_embed_id
@@ -5,7 +7,8 @@ class Menu_Embed:
         self.title = embed_title
         self.description = embed_description
         # load roles
-        self.roles =
+        self.roles = db.load_embed_menu_roles(menu_embed_id)
+
 
     def get_id(self):
         return self.id
@@ -19,6 +22,9 @@ class Menu_Embed:
     def get_description(self):
         return self.description
 
+    def get_roles(self):
+        return self.roles
+
     def set_id(self, menu_embed_id):
         self.id = menu_embed_id
 
@@ -30,3 +36,6 @@ class Menu_Embed:
 
     def set_description(self, description):
         self.description = description
+
+    def set_roles(self, roles):
+        self.description = roles
