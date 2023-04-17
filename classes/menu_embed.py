@@ -1,14 +1,16 @@
 from database import database as db
 
 class Menu_Embed:
-    def __init__(self, menu_embed_id, message_id, embed_title=None, embed_description=None):
+    def __init__(self, menu_embed_id, message_id, embed_title=None, embed_description=None, embed_roles=None):
         self.id = menu_embed_id
         self.message_id = message_id
         self.title = embed_title
         self.description = embed_description
         # load roles
-        self.roles = db.load_embed_menu_roles(menu_embed_id)
-
+        if embed_roles is None:
+            self.roles = db.load_embed_menu_roles(menu_embed_id)
+        else:
+            self.roles = embed_roles
 
     def get_id(self):
         return self.id
