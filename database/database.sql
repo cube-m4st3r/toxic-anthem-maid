@@ -21,6 +21,7 @@ USE `TA_Maid` ;
 CREATE TABLE IF NOT EXISTS `TA_Maid`.`role` (
   `role_id` VARCHAR(45) NOT NULL,
   `role_name` VARCHAR(45) NOT NULL,
+  `button_mode` VARCHAR(45) NULL
   PRIMARY KEY (`role_id`))
 ENGINE = InnoDB;
 

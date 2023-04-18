@@ -5,6 +5,9 @@ import time
 import discord
 from discord import app_commands
 from discord.ext import commands
+
+from classes.button import Button
+from classes.menu_embed import Menu_Embed
 from classes.roles import Roles
 from random import randrange
 
@@ -43,8 +46,18 @@ class RoleMenuSelect(discord.ui.RoleSelect):
                 db.insert_role(roles.get_role_id(), roles.get_role_name())
             embed.add_field(name=roles.get_role_name(), value="Role", inline=False)
             db.insert_role_menu_embed(roles.get_role_id(), id, "description")
+
+            role_button = RoleMenuButton(roles.get_role_name(), discord.ButtonStyle.primary, roles.get_role_name())
+            rolemenubutton.add_item(role_button)
+            button_class = Button(role_button.mode)
+
+            roles.set_role_button(button_class)
+
             tRoles.append(roles)
-            rolemenubutton.add_item(RoleMenuButton(roles.get_role_name(), discord.ButtonStyle.primary, roles.get_role_name()))
+
+        menu_embed = Menu_Embed(id, interaction.message.id, embed.title, embed.description, tRoles)
+        menu_roles = menu_embed.get_roles()
+
         await interaction.response.send_message(embed=embed, view=rolemenubutton)
 
 
